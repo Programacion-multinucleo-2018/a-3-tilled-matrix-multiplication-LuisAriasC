@@ -11,7 +11,7 @@
 
 
 using namespace std;
-#define matrixSize 2000
+#define matrixSize 1000
 //#define tileSize 8
 #define tileSize 16
 //#define tileSize 32
@@ -144,11 +144,11 @@ int main(int argc, char **argv){
 
     /* MATRIX MULT ON GPU */
     SAFE_CALL(cudaMemset(d_MatC, 0, nBytes), "Error setting d_MatC to 0");
-    auto start_cpu =  chrono::high_resolution_clock::now();
+    start_cpu =  chrono::high_resolution_clock::now();
     multMatrixOnGPU2d2d<<<grid, block>>>(d_MatA, d_MatB, d_MatC, matrixSize);
     SAFE_CALL(cudaDeviceSynchronize(), "Error executing kernel");
-    auto end_cpu =  chrono::high_resolution_clock::now();
-    chrono::duration<float, std::milli> duration_ms = end_cpu - start_cpu;
+    end_cpu =  chrono::high_resolution_clock::now();
+    duration_ms = end_cpu - start_cpu;
     printf("sumMatrixOnGPU2D <<<(%d,%d), (%d,%d)>>> elapsed %f ms\n", grid.x, grid.y, block.x, block.y, duration_ms.count());
 
     SAFE_CALL(cudaGetLastError(), "Error with last error");
